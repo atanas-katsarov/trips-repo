@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "431375812492",
+    "firebase_url": "https://trips-dc454.firebaseio.com",
+    "project_id": "trips-dc454",
+    "storage_bucket": "trips-dc454.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431375812492:android:2e96b637da5cab066df8a9",
+        "android_client_info": {
+          "package_name": "uni.master.trips"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431375812492-t8qiuinabfm2ft243rq1k9qb44956uv7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdpbT52-Pq1OfbY7jfOA9Guthu1jA5iFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431375812492-t8qiuinabfm2ft243rq1k9qb44956uv7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
