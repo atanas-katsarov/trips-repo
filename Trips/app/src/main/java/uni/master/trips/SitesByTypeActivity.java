@@ -1,9 +1,5 @@
 package uni.master.trips;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,32 +10,43 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoriesActivity extends AppCompatActivity {
+public class SitesByTypeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.categories);
+        setContentView(R.layout.sites_by_type);
+
+        Intent intent = getIntent();
+        String categoryName = intent.getStringExtra("title");
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        if (categoryName == null) {
+            categoryName = "Types";
+        }
+        getSupportActionBar().setTitle(categoryName);
 
-        ListView categoriesListView = findViewById(R.id.categories_list);
-        List<String> categoryOptions = new ArrayList<>();
-        categoryOptions.add("Lakes");
-        categoryOptions.add("Parks");
-        final ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, categoryOptions);
-        categoriesListView.setAdapter(categoriesAdapter);
-        categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        ListView sitesListView = findViewById(R.id.sites_list);
+        List<String> siteOptions = new ArrayList<>();
+        siteOptions.add("Site 1");
+        siteOptions.add("Site 2");
+        final ArrayAdapter<String> sitesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, siteOptions);
+        sitesListView.setAdapter(sitesAdapter);
+        sitesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String categoryItem = (String) parent.getItemAtPosition(position);
+                String siteItem = (String) parent.getItemAtPosition(position);
 
-                Intent intent = new Intent(CategoriesActivity.this, SitesByTypeActivity.class);
-                intent.putExtra("title", categoryItem);
+                Intent intent = new Intent(SitesByTypeActivity.this, SiteDetailsActivity.class);
+                intent.putExtra("site_name", siteItem);
                 startActivity(intent);
             }
         });
@@ -48,7 +55,7 @@ public class CategoriesActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        if (false) {
+        if (true) {
             inflater.inflate(R.menu.toolbar_logged_in, menu);
         } else {
             inflater.inflate(R.menu.toolbar_logged_out, menu);
@@ -60,16 +67,16 @@ public class CategoriesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.login:
-                startActivity(new Intent(CategoriesActivity.this, LoginActivity.class));
+                startActivity(new Intent(SitesByTypeActivity.this, LoginActivity.class));
                 break;
             case R.id.logout:
 //                startActivity(toolbarIntent);
                 break;
             case R.id.register:
-                startActivity(new Intent(CategoriesActivity.this, RegisterActivity.class));
+                startActivity(new Intent(SitesByTypeActivity.this, RegisterActivity.class));
                 break;
             case R.id.profile:
-                startActivity(new Intent(CategoriesActivity.this, MySitesActivity.class));
+                startActivity(new Intent(SitesByTypeActivity.this, MySitesActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
