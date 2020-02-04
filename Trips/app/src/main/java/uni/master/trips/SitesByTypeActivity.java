@@ -23,10 +23,10 @@ public class SitesByTypeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sites_by_type);
-
+        // get the title from the intent
         Intent intent = getIntent();
         String categoryName = intent.getStringExtra("title");
-
+        // set action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (categoryName == null) {
@@ -35,6 +35,9 @@ public class SitesByTypeActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(categoryName);
 
         ListView sitesListView = findViewById(R.id.sites_list);
+        // list with options
+        // TODO get data from Firebase
+        // TODO use custom class instead of String
         List<String> siteOptions = new ArrayList<>();
         siteOptions.add("Site 1");
         siteOptions.add("Site 2");
@@ -43,8 +46,9 @@ public class SitesByTypeActivity extends AppCompatActivity {
         sitesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // get the Item name
                 String siteItem = (String) parent.getItemAtPosition(position);
-
+                // TODO get site details
                 Intent intent = new Intent(SitesByTypeActivity.this, SiteDetailsActivity.class);
                 intent.putExtra("site_name", siteItem);
                 startActivity(intent);
@@ -54,6 +58,8 @@ public class SitesByTypeActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // action bar buttons
+        // TODO check session
         MenuInflater inflater = getMenuInflater();
         if (true) {
             inflater.inflate(R.menu.toolbar_logged_in, menu);
@@ -65,6 +71,7 @@ public class SitesByTypeActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // switch between available action bar buttons
         switch (item.getItemId()) {
             case R.id.login:
                 startActivity(new Intent(SitesByTypeActivity.this, LoginActivity.class));

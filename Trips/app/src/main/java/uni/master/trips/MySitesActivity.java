@@ -14,22 +14,25 @@ public class MySitesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_sites);
-
+        // set action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // action bar buttons
         getMenuInflater().inflate(R.menu.toolbar_profile, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // switch between available action bar buttons
 //        Intent toolbarIntent;
         switch (item.getItemId()) {
             case R.id.logout:
+                // TODO logout user
 //                toolbarIntent = new Intent(MySitesActivity.this, LoginActivity.class);
 //                startActivity(toolbarIntent);
                 break;

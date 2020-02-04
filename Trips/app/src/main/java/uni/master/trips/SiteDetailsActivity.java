@@ -17,10 +17,10 @@ public class SiteDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.site_details);
-
+        // set action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        // get the site name from the intent
         Intent intent = getIntent();
         String siteName = intent.getStringExtra("site_name");
 
@@ -31,6 +31,8 @@ public class SiteDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // action bar buttons
+        // TODO check session
         MenuInflater inflater = getMenuInflater();
         if (true) {
             inflater.inflate(R.menu.toolbar_logged_in, menu);
@@ -42,6 +44,7 @@ public class SiteDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // switch between available action bar buttons
         switch (item.getItemId()) {
             case R.id.login:
                 startActivity(new Intent(SiteDetailsActivity.this, LoginActivity.class));
