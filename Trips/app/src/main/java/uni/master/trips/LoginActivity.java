@@ -44,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onBtnRegisterClick(View v) {
-        Intent categoryPage = new Intent(LoginActivity.this, RegisterActivity.class);
+        Intent registerPage = new Intent(LoginActivity.this, RegisterActivity.class);
         finish();
-        startActivity(categoryPage);
+        startActivity(registerPage);
     }
 }
