@@ -13,6 +13,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import uni.master.trips.entities.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -21,6 +26,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText passwordRepeat;
     Button register;
     FirebaseAuth firebaseAuth;
+    DatabaseReference firebase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +51,20 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        Toast.makeText(RegisterActivity.this, "User registred", Toast.LENGTH_LONG).show();
+                        firebase = FirebaseDatabase.getInstance().getReference();
+                        User user = new User(username.getText().toString());
+                        firebase.child("Users").setValue(user, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                                //Problem with saving the data
+                                if (databaseError != null) {
+                                    Toast.makeText(RegisterActivity.this, databaseError.getMessage(), Toast.LENGTH_LONG).show();
+                                } else {
+                                    //Data uploaded successfully on the server
+                                    Toast.makeText(RegisterActivity.this, "User registred", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
                     } else {
                         Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
