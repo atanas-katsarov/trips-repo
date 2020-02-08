@@ -17,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -33,6 +34,7 @@ public class CategoriesActivity extends AppCompatActivity {
     List<String> categoryOptions;
     ListView categoriesListView;
     Toolbar toolbar;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +45,12 @@ public class CategoriesActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // get the Authentication object
+        firebaseAuth = FirebaseAuth.getInstance();
+
         // get the list view
         categoriesListView = findViewById(R.id.categories_list);
+        final int listItemId = android.R.layout.simple_list_item_1;
         // list with options
         // TODO use custom class instead of String
         categoryOptions = new ArrayList<>();
@@ -58,26 +64,27 @@ public class CategoriesActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot categorySnapshot : task.getResult()) {
                                 categoryOptions.add(categorySnapshot.toObject(Category.class).getName());
                             }
+                            // set adapter to the listView
+                            final ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(CategoriesActivity.this, listItemId, categoryOptions);
+                            categoriesListView.setAdapter(categoriesAdapter);
+                            categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    // get the Item name
+                                    String categoryItem = (String) parent.getItemAtPosition(position);
+                                    // TODO filter sites by the selected category
+                                    Intent intent = new Intent(CategoriesActivity.this, SitesByTypeActivity.class);
+                                    intent.putExtra("title", categoryItem);
+                                    startActivity(intent);
+                                }
+                            });
                         } else {
                             Toast.makeText(CategoriesActivity.this, "Couldn't load categories", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
 
-        // set adapter to the listView
-        final ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, categoryOptions);
-        categoriesListView.setAdapter(categoriesAdapter);
-        categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // get the Item name
-                String categoryItem = (String) parent.getItemAtPosition(position);
-                // TODO filter sites by the selected category
-                Intent intent = new Intent(CategoriesActivity.this, SitesByTypeActivity.class);
-                intent.putExtra("title", categoryItem);
-                startActivity(intent);
-            }
-        });
+
     }
 
     @Override
@@ -85,7 +92,7 @@ public class CategoriesActivity extends AppCompatActivity {
         // action bar buttons
         // TODO get current session and check if user is logged in
         MenuInflater inflater = getMenuInflater();
-        if (false) {
+        if (firebaseAuth.getCurrentUser().isAnonymous()) {
             inflater.inflate(R.menu.toolbar_logged_in, menu);
         } else {
             inflater.inflate(R.menu.toolbar_logged_out, menu);
