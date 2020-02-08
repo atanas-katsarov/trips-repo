@@ -1,9 +1,5 @@
 package uni.master.trips;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,11 +9,30 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import uni.master.trips.entities.Category;
+
+//TODO: Take the global variables above onCreate()
 public class CategoriesActivity extends AppCompatActivity {
+
+    FirebaseFirestore db;
+    List<String> categoryOptions;
+    ListView categoriesListView;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,17 +40,30 @@ public class CategoriesActivity extends AppCompatActivity {
         setContentView(R.layout.categories);
 
         // set action bar
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // get the list view
-        ListView categoriesListView = findViewById(R.id.categories_list);
+        categoriesListView = findViewById(R.id.categories_list);
         // list with options
-        // TODO get data from Firebase
         // TODO use custom class instead of String
-        List<String> categoryOptions = new ArrayList<>();
-        categoryOptions.add("Lakes");
-        categoryOptions.add("Parks");
+        categoryOptions = new ArrayList<>();
+        db = FirebaseFirestore.getInstance();
+        db.collection("Categories")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot categorySnapshot : task.getResult()) {
+                                categoryOptions.add(categorySnapshot.toObject(Category.class).getName());
+                            }
+                        } else {
+                            Toast.makeText(CategoriesActivity.this, "Couldn't load categories", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
         // set adapter to the listView
         final ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, categoryOptions);
         categoriesListView.setAdapter(categoriesAdapter);

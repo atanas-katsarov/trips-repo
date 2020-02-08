@@ -3,14 +3,20 @@ package uni.master.trips.entities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class Category {
+import java.io.Serializable;
+import java.util.Objects;
 
-    private int id;
+public class Category implements Serializable {
+
+    private String id;
     private String name;
 
-    public Category(int id, String name) {
+    public Category(String id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public Category() {
     }
 
     @Override
@@ -18,12 +24,12 @@ public class Category {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Category category = (Category) obj;
-        return id == category.id && name.equals(category.name);
+        return id .equals(category.id) && name.equals(category.name);
     }
 
     @Override
     public int hashCode() {
-        return id;
+        return Objects.hash(id);
     }
 
     @NonNull
@@ -34,11 +40,11 @@ public class Category {
                 "ID : " + id + " Name : " + name;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
