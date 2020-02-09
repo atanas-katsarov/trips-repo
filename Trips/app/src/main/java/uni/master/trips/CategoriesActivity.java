@@ -24,10 +24,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import uni.master.trips.entities.Category;
 
-//TODO: Take the global variables above onCreate()
 public class CategoriesActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
@@ -52,45 +52,39 @@ public class CategoriesActivity extends AppCompatActivity {
         categoriesListView = findViewById(R.id.categories_list);
         final int listItemId = android.R.layout.simple_list_item_1;
         // list with options
-        // TODO use custom class instead of String
         categoryOptions = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
-        db.collection("Categories")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot categorySnapshot : task.getResult()) {
-                                categoryOptions.add(categorySnapshot.toObject(Category.class).getName());
-                            }
-                            // set adapter to the listView
-                            final ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(CategoriesActivity.this, listItemId, categoryOptions);
-                            categoriesListView.setAdapter(categoriesAdapter);
-                            categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    // get the Item name
-                                    String categoryItem = (String) parent.getItemAtPosition(position);
-                                    // TODO filter sites by the selected category
-                                    Intent intent = new Intent(CategoriesActivity.this, SitesByTypeActivity.class);
-                                    intent.putExtra("title", categoryItem);
-                                    startActivity(intent);
-                                }
-                            });
-                        } else {
-                            Toast.makeText(CategoriesActivity.this, "Couldn't load categories", Toast.LENGTH_LONG).show();
-                        }
+        db.collection("Categories").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot categorySnapshot : Objects.requireNonNull(task.getResult())) {
+                        categoryOptions.add(categorySnapshot.toObject(Category.class).getName());
                     }
-                });
-
-
+                    // set adapter to the listView
+                    final ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<>(CategoriesActivity.this, listItemId, categoryOptions);
+                    categoriesListView.setAdapter(categoriesAdapter);
+                    categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            // get the Item name
+                            String categoryItem = (String) parent.getItemAtPosition(position);
+                            // TODO filter sites by the selected category
+                            Intent intent = new Intent(CategoriesActivity.this, SitesByTypeActivity.class);
+                            intent.putExtra("title", categoryItem);
+                            startActivity(intent);
+                        }
+                    });
+                } else {
+                    Toast.makeText(CategoriesActivity.this, "Couldn't load categories", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // action bar buttons
-        // TODO get current session and check if user is logged in
         MenuInflater inflater = getMenuInflater();
         if (firebaseAuth.getCurrentUser() != null) {
             inflater.inflate(R.menu.toolbar_logged_in, menu);
