@@ -108,8 +108,9 @@ public class CategoriesActivity extends AppCompatActivity {
                 startActivity(new Intent(CategoriesActivity.this, LoginActivity.class));
                 break;
             case R.id.logout:
-                // TODO logout user
-//                startActivity(toolbarIntent);
+                firebaseAuth.signOut();
+                finish();
+                startActivity(new Intent(CategoriesActivity.this, CategoriesActivity.class));
                 break;
             case R.id.register:
                 startActivity(new Intent(CategoriesActivity.this, RegisterActivity.class));
