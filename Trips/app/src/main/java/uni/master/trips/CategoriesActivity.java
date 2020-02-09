@@ -92,7 +92,7 @@ public class CategoriesActivity extends AppCompatActivity {
         // action bar buttons
         // TODO get current session and check if user is logged in
         MenuInflater inflater = getMenuInflater();
-        if (firebaseAuth.getCurrentUser().isAnonymous()) {
+        if (firebaseAuth.getCurrentUser() != null) {
             inflater.inflate(R.menu.toolbar_logged_in, menu);
         } else {
             inflater.inflate(R.menu.toolbar_logged_out, menu);
