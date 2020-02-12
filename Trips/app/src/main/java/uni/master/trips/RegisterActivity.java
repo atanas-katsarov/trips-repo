@@ -1,26 +1,31 @@
 package uni.master.trips;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashMap;
+import java.util.Map;
+import uni.master.trips.entities.User;
 
 public class RegisterActivity extends AppCompatActivity {
 
     EditText username;
     EditText password;
     EditText passwordRepeat;
-    Button register;
     FirebaseAuth firebaseAuth;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +35,6 @@ public class RegisterActivity extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
         passwordRepeat = findViewById(R.id.passwordRepeat);
-        register = findViewById(R.id.btnRegister);
         firebaseAuth = FirebaseAuth.getInstance();
     }
 
@@ -44,7 +48,25 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        Toast.makeText(RegisterActivity.this, "User registred", Toast.LENGTH_LONG).show();
+                        db = FirebaseFirestore.getInstance();
+                        User user = new User(username.getText().toString());
+                        Map<String, Object> userMap = new HashMap<>();
+                        userMap.put("ID", user.getId());
+                        userMap.put("Email", user.getEmail());
+                        db.collection("Users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Intent categoryPage = new Intent(RegisterActivity.this, CategoriesActivity.class);
+                                finish();
+                                Toast.makeText(RegisterActivity.this, "User registred", Toast.LENGTH_LONG).show();
+                                startActivity(categoryPage);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(RegisterActivity.this, "Couldn't register the user", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     } else {
                         Toast.makeText(RegisterActivity.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
