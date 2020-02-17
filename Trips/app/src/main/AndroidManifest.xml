@@ -11,8 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".CategoriesActivity"
-            android:label="Categories">
+        <activity android:name=".MainActivity"
+            android:label="Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,21 +29,6 @@
         </activity>
         <activity android:name=".RegisterActivity"
             android:label="Register">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".SitesByTypeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".SiteDetailsActivity"
-            android:label="Details">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

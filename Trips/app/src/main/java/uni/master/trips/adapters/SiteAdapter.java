@@ -1,6 +1,7 @@
 package uni.master.trips.adapters;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -9,22 +10,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import uni.master.trips.R;
 import uni.master.trips.models.SiteItemModel;
 
 public class SiteAdapter extends ArrayAdapter<SiteItemModel> implements View.OnClickListener {
-    private ArrayList<SiteItemModel> siteSet;
-    Context context;
+    private List<SiteItemModel> siteSet;
+    private Context context;
 
-    private static class ViewHolder {
-        TextView title;
-        TextView description;
-    }
+//    private static class ViewHolder {
+//        TextView title;
+//        TextView description;
+//    }
 
-    public SiteAdapter(ArrayList<SiteItemModel> data, Context context) {
-        super(context, R.layout.site_row_item, data);
+    public SiteAdapter(List<SiteItemModel> data, Context context) {
+        super(context, R.layout.row_item_site, data);
         this.siteSet = data;
         this.context=context;
     }
@@ -37,6 +38,15 @@ public class SiteAdapter extends ArrayAdapter<SiteItemModel> implements View.OnC
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return super.getView(position, convertView, parent);
+        if (convertView == null) {
+//            LayoutInflater inflater = ((MainActivity) getContext()).getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate (R.layout.row_item_site, parent, false);
+        }
+        TextView titleView = convertView.findViewById(R.id.site_row_title);
+        TextView descView = convertView.findViewById(R.id.site_row_desc);
+        titleView.setText(getItem(position).getTitle());
+        descView.setText(getItem(position).getDescription());
+        return convertView;
     }
 }

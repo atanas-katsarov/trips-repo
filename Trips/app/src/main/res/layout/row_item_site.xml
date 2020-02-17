@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/site_row_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:textSize="29sp"
+        android:paddingLeft="20sp"
+        android:paddingRight="20sp"
+        android:textColor="@color/colorTitle"
+        android:text="Site Name" />
+
+    <TextView
+        android:id="@+id/site_row_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:paddingLeft="15sp"
+        android:paddingRight="15sp"
+        android:textColor="@color/colorDescription"
+        android:layout_below="@+id/site_row_title"
+        android:layout_marginBottom="20sp"
+        android:text="Description" />
+</RelativeLayout>

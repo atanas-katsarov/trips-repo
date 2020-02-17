@@ -56,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
                         db.collection("Users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Intent categoryPage = new Intent(RegisterActivity.this, CategoriesActivity.class);
+                                Intent categoryPage = new Intent(RegisterActivity.this, MainActivity.class);
                                 finish();
                                 Toast.makeText(RegisterActivity.this, "User registred", Toast.LENGTH_LONG).show();
                                 startActivity(categoryPage);
