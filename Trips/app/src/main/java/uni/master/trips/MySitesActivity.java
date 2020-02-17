@@ -9,7 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MySitesActivity extends AppCompatActivity {
+
+    private FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +22,9 @@ public class MySitesActivity extends AppCompatActivity {
         // set action bar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // get the Authentication object
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -32,9 +40,9 @@ public class MySitesActivity extends AppCompatActivity {
 //        Intent toolbarIntent;
         switch (item.getItemId()) {
             case R.id.logout:
-                // TODO logout user
-//                toolbarIntent = new Intent(MySitesActivity.this, LoginActivity.class);
-//                startActivity(toolbarIntent);
+                firebaseAuth.signOut();
+                finish();
+                startActivity(new Intent(MySitesActivity.this, MainActivity.class));
                 break;
             case R.id.add_new_site:
 //                toolbarIntent = new Intent(MySitesActivity.this, LoginActivity.class);

@@ -94,12 +94,10 @@ public class CategoriesFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot categorySnapshot : Objects.requireNonNull(task.getResult())) {
-//                        categoryOptions.add(categorySnapshot.toObject(Category.class).getName());
                         categoryOptions.add(new CategoryItemModel(categorySnapshot.toObject(Category.class).getName(),"0"));
                     }
                     // set adapter to the listView
                     final CategoryAdapter categoriesAdapter = new CategoryAdapter(categoryOptions, getActivity().getApplicationContext());
-//                    final ArrayAdapter<CategoryItemModel> categoriesAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(), listItemId, categoryOptions);
                     categoriesListView.setAdapter(categoriesAdapter);
                     categoriesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -109,9 +107,6 @@ public class CategoriesFragment extends Fragment {
                             // set title of action bar
                             ((MainActivity) getActivity()).getSupportActionBar().setTitle(categoryItem.getCategoryName());
                             // TODO filter sites by the selected category
-//                            Intent intent = new Intent(MainActivity.this, SitesByTypeFragment.class);
-//                            intent.putExtra("title", categoryItem);
-//                            startActivity(intent);
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SitesByTypeFragment()).commit();
                         }
                     });
