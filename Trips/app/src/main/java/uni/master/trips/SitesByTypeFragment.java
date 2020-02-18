@@ -97,7 +97,7 @@ public class SitesByTypeFragment extends Fragment {
                             // set title of action bar
                             ((MainActivity) getActivity()).getSupportActionBar().setTitle(siteItem.getTitle());
                             // TODO filter sites by the selected category
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SiteDetailsFragment()).commit();
+                            getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, new SiteDetailsFragment()).commit();
                         }
                     });
                 } else {
