@@ -8,10 +8,10 @@ import java.util.Objects;
 
 public class Category implements Serializable {
 
-    private String id;
+    private int id;
     private String name;
 
-    public Category(String id, String name) {
+    public Category(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -24,7 +24,7 @@ public class Category implements Serializable {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         Category category = (Category) obj;
-        return id .equals(category.id) && name.equals(category.name);
+        return id == category.id && name.equals(category.name);
     }
 
     @Override
@@ -40,11 +40,11 @@ public class Category implements Serializable {
                 "ID : " + id + " Name : " + name;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
