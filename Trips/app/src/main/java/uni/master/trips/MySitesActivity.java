@@ -37,7 +37,6 @@ public class MySitesActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // switch between available action bar buttons
-//        Intent toolbarIntent;
         switch (item.getItemId()) {
             case R.id.logout:
                 firebaseAuth.signOut();
@@ -45,8 +44,7 @@ public class MySitesActivity extends AppCompatActivity {
                 startActivity(new Intent(MySitesActivity.this, MainActivity.class));
                 break;
             case R.id.add_new_site:
-//                toolbarIntent = new Intent(MySitesActivity.this, LoginActivity.class);
-//                startActivity(intent);
+                startActivity(new Intent(MySitesActivity.this, NewSiteActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
