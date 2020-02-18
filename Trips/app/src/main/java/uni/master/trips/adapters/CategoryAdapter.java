@@ -13,13 +13,13 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import uni.master.trips.R;
-import uni.master.trips.models.CategoryItemModel;
+import uni.master.trips.entities.Category;
 
-public class CategoryAdapter extends ArrayAdapter<CategoryItemModel> {
-    private List<CategoryItemModel> categorySet;
+public class CategoryAdapter extends ArrayAdapter<Category> {
+    private List<Category> categorySet;
     private Context context;
 
-    public CategoryAdapter(List<CategoryItemModel> categorySet, Context context) {
+    public CategoryAdapter(List<Category> categorySet, Context context) {
         super(context, R.layout.row_item_category, categorySet);
         this.categorySet = categorySet;
         this.context = context;
@@ -35,7 +35,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryItemModel> {
         }
         TextView titleView = convertView.findViewById(R.id.category_row_title);
 //        TextView descView = convertView.findViewById(R.id.site_row_desc);
-        titleView.setText(getItem(position).getCategoryName());
+        titleView.setText(getItem(position).getName());
 //        descView.setText(getItem(position).getDescription());
         return convertView;
     }

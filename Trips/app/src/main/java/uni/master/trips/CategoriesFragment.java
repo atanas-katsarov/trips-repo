@@ -27,17 +27,7 @@ import java.util.Objects;
 
 import uni.master.trips.adapters.CategoryAdapter;
 import uni.master.trips.entities.Category;
-import uni.master.trips.models.CategoryItemModel;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnCategoriesInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CategoriesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CategoriesFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -49,7 +39,7 @@ public class CategoriesFragment extends Fragment {
     private OnCategoriesInteractionListener mListener;
 
     private FirebaseFirestore db;
-    private List<CategoryItemModel> categoryOptions;
+    private List<Category> categoryOptions;
     private ListView categoriesListView;
     private FirebaseAuth firebaseAuth;
 
@@ -94,7 +84,7 @@ public class CategoriesFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot categorySnapshot : Objects.requireNonNull(task.getResult())) {
-                        categoryOptions.add(new CategoryItemModel(categorySnapshot.toObject(Category.class).getName(),"0"));
+                        categoryOptions.add(categorySnapshot.toObject(Category.class));
                     }
                     // set adapter to the listView
                     final CategoryAdapter categoriesAdapter = new CategoryAdapter(categoryOptions, getActivity().getApplicationContext());
@@ -103,11 +93,11 @@ public class CategoriesFragment extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             // get the Item name
-                            CategoryItemModel categoryItem = (CategoryItemModel) parent.getItemAtPosition(position);
+                            Category categoryItem = (Category) parent.getItemAtPosition(position);
                             // set title of action bar
-                            ((MainActivity) getActivity()).getSupportActionBar().setTitle(categoryItem.getCategoryName());
+                            ((MainActivity) getActivity()).getSupportActionBar().setTitle(categoryItem.getName());
                             // TODO filter sites by the selected category
-                            getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, new SitesByTypeFragment()).commit();
+                            getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, SitesByTypeFragment.newInstance(categoryItem.getId())).commit();
                         }
                     });
                 } else {

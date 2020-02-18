@@ -16,9 +16,12 @@ import uni.master.trips.models.SiteItemModel;
 public class MySiteAdapter extends ArrayAdapter<SiteItemModel> {
 
     private List<SiteItemModel> mySiteSet;
+    private Context context;
 
     public MySiteAdapter(List<SiteItemModel> sitesData, Context context) {
         super(context, R.layout.row_item_my_site, sitesData);
+        this.mySiteSet = sitesData;
+        this.context = context;
     }
 
     @NonNull

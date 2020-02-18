@@ -24,21 +24,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import uni.master.trips.adapters.CategoryAdapter;
 import uni.master.trips.adapters.SiteAdapter;
-import uni.master.trips.entities.Category;
 import uni.master.trips.entities.Site;
-import uni.master.trips.models.CategoryItemModel;
 import uni.master.trips.models.SiteItemModel;
 
 public class SitesByTypeFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ID_CATEGORY = "id";
 
-    private String mParam1;
-    private String mParam2;
+    private Integer idCategory;
 
     private OnSiteByTypeInteractionListener mListener;
 
@@ -51,11 +45,10 @@ public class SitesByTypeFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static SitesByTypeFragment newInstance(String param1, String param2) {
+    public static SitesByTypeFragment newInstance(Integer id) {
         SitesByTypeFragment fragment = new SitesByTypeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ID_CATEGORY, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,8 +57,7 @@ public class SitesByTypeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            idCategory = getArguments().getInt(ID_CATEGORY);
         }
     }
 
