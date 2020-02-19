@@ -9,27 +9,27 @@ public class Site implements Serializable {
     private String name;
     private String description;
     private String countryName;
-    private int userId;
+    private String userEmail;
     private int categoryId;
 
     public Site() {
     }
 
-    public Site(String name, String description, String countryName, int userId, int categoryId) {
+    public Site(String name, String description, String countryName, String userEmail, int categoryId) {
         this.id = 31 * Objects.hash(name) + Objects.hash(description, countryName);
         this.name = name;
         this.description = description;
         this.countryName = countryName;
-        this.userId = userId;
+        this.userEmail = userEmail;
         this.categoryId = categoryId;
     }
 
-    public Site(int id, String name, String description, String countryName, int userId, int categoryId) {
+    public Site(int id, String name, String description, String countryName, String userEmail, int categoryId) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.countryName = countryName;
-        this.userId = userId;
+        this.userEmail = userEmail;
         this.categoryId = categoryId;
     }
 

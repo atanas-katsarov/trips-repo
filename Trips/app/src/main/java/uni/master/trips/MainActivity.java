@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity implements CategoriesFragment.OnCategoriesInteractionListener, SitesByTypeFragment.OnSiteByTypeInteractionListener, SiteDetailsFragment.OnDetailsInteractionListener{
 
@@ -60,7 +61,12 @@ public class MainActivity extends AppCompatActivity implements CategoriesFragmen
                 startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                 break;
             case R.id.profile:
-                startActivity(new Intent(MainActivity.this, MySitesActivity.class));
+                Intent intent = new Intent(MainActivity.this, MySitesActivity.class);
+                Bundle b = new Bundle();
+                b.putString("email", firebaseAuth.getCurrentUser().getEmail());
+                intent.putExtras(b);
+                finish();
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

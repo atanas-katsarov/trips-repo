@@ -96,7 +96,6 @@ public class CategoriesFragment extends Fragment {
                             Category categoryItem = (Category) parent.getItemAtPosition(position);
                             // set title of action bar
                             ((MainActivity) getActivity()).getSupportActionBar().setTitle(categoryItem.getName());
-                            // TODO filter sites by the selected category
                             getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, SitesByTypeFragment.newInstance(categoryItem.getId())).commit();
                         }
                     });

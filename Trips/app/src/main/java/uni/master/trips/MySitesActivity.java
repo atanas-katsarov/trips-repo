@@ -47,9 +47,13 @@ public class MySitesActivity extends AppCompatActivity {
 
         sitesListView = findViewById(R.id.my_sites_list);
         siteOptions = new ArrayList<>();
+        Bundle b = getIntent().getExtras();
+        String email = "";
+        if(b != null)
+            email = b.getString("email");
 
         db = FirebaseFirestore.getInstance();
-        db.collection("Sites").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Sites").whereEqualTo("userEmail", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
