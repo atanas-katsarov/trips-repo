@@ -17,6 +17,8 @@
         android:id="@+id/my_sites_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="10.0sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />

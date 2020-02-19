@@ -3,7 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="colorBackground">#cededb</color>
+    <color name="colorBackground">#CEDEDB</color>
     <color name="colorTitle">#0d0f0f</color>
     <color name="colorDescription">#252626</color>
 </resources>
