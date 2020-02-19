@@ -13,10 +13,10 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import uni.master.trips.R;
-import uni.master.trips.models.SiteItemModel;
+import uni.master.trips.entities.Site;
 
-public class SiteAdapter extends ArrayAdapter<SiteItemModel> implements View.OnClickListener {
-    private List<SiteItemModel> siteSet;
+public class SiteAdapter extends ArrayAdapter<Site> implements View.OnClickListener {
+    private List<Site> siteSet;
     private Context context;
 
 //    private static class ViewHolder {
@@ -24,7 +24,7 @@ public class SiteAdapter extends ArrayAdapter<SiteItemModel> implements View.OnC
 //        TextView description;
 //    }
 
-    public SiteAdapter(List<SiteItemModel> data, Context context) {
+    public SiteAdapter(List<Site> data, Context context) {
         super(context, R.layout.row_item_site, data);
         this.siteSet = data;
         this.context=context;
@@ -39,13 +39,12 @@ public class SiteAdapter extends ArrayAdapter<SiteItemModel> implements View.OnC
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-//            LayoutInflater inflater = ((MainActivity) getContext()).getLayoutInflater();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate (R.layout.row_item_site, parent, false);
         }
         TextView titleView = convertView.findViewById(R.id.site_row_title);
         TextView descView = convertView.findViewById(R.id.site_row_desc);
-        titleView.setText(getItem(position).getTitle());
+        titleView.setText(getItem(position).getName());
         descView.setText(getItem(position).getDescription());
         return convertView;
     }

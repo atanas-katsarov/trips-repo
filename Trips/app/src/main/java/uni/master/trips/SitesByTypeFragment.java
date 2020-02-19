@@ -26,7 +26,6 @@ import java.util.Objects;
 
 import uni.master.trips.adapters.SiteAdapter;
 import uni.master.trips.entities.Site;
-import uni.master.trips.models.SiteItemModel;
 
 public class SitesByTypeFragment extends Fragment {
 
@@ -38,7 +37,7 @@ public class SitesByTypeFragment extends Fragment {
 
     private FirebaseFirestore db;
     private FirebaseAuth firebaseAuth;
-    private List<SiteItemModel> siteOptions;
+    private List<Site> siteOptions;
     private ListView sitesListView;
 
     public SitesByTypeFragment() {
@@ -76,7 +75,7 @@ public class SitesByTypeFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot siteSnapshot : Objects.requireNonNull(task.getResult())) {
-                        siteOptions.add(new SiteItemModel(siteSnapshot.toObject(Site.class).getName(), siteSnapshot.toObject(Site.class).getName()));
+                        siteOptions.add(siteSnapshot.toObject(Site.class));
                     }
                     // set adapter to the listView
                     final SiteAdapter siteAdapter = new SiteAdapter(siteOptions, getActivity().getApplicationContext());
@@ -85,9 +84,9 @@ public class SitesByTypeFragment extends Fragment {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             // get the Item name
-                            SiteItemModel siteItem = (SiteItemModel) parent.getItemAtPosition(position);
+                            Site siteItem = (Site) parent.getItemAtPosition(position);
                             // set title of action bar
-                            ((MainActivity) getActivity()).getSupportActionBar().setTitle(siteItem.getTitle());
+                            ((MainActivity) getActivity()).getSupportActionBar().setTitle(siteItem.getName());
                             // TODO filter sites by the selected category
                             getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, new SiteDetailsFragment()).commit();
                         }
@@ -99,17 +98,14 @@ public class SitesByTypeFragment extends Fragment {
         });
         
         SiteAdapter sitesAdapter = new SiteAdapter(siteOptions,getActivity().getApplicationContext());
-//                new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, siteOptions);
+
         sitesListView.setAdapter(sitesAdapter);
         sitesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // get the Item name
-                SiteItemModel siteItem = (SiteItemModel) parent.getItemAtPosition(position);
+                Site siteItem = (Site) parent.getItemAtPosition(position);
                 // TODO get site details
-//                Intent intent = new Intent(MainActivity.this, SiteDetailsFragment.class);
-//                intent.putExtra("site_name", siteItem);
-//                startActivity(intent);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SiteDetailsFragment()).commit();
 
             }

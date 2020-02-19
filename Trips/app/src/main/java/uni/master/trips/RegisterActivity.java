@@ -30,7 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
+        setContentView(R.layout.activity_register);
 
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
@@ -64,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(RegisterActivity.this, "Couldn't register the user", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, "Couldn't activity_register the user", Toast.LENGTH_LONG).show();
                             }
                         });
                     } else {
