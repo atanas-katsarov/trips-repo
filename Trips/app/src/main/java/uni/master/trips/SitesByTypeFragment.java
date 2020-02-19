@@ -96,20 +96,6 @@ public class SitesByTypeFragment extends Fragment {
                 }
             }
         });
-        
-        SiteAdapter sitesAdapter = new SiteAdapter(siteOptions,getActivity().getApplicationContext());
-
-        sitesListView.setAdapter(sitesAdapter);
-        sitesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // get the Item name
-                Site siteItem = (Site) parent.getItemAtPosition(position);
-                // TODO get site details
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SiteDetailsFragment()).commit();
-
-            }
-        });
         return view;
     }
 

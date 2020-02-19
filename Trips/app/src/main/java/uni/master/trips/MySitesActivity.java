@@ -70,26 +70,13 @@ public class MySitesActivity extends AppCompatActivity {
                             Site siteItem = (Site) parent.getItemAtPosition(position);
                             // set title of action bar
                             getSupportActionBar().setTitle(siteItem.getName());
-                            // TODO filter sites by the selected category
-                            getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, new SiteDetailsFragment()).commit();
+                            Toast.makeText(getApplicationContext(), "Couldn't load fragment_categories", Toast.LENGTH_LONG).show();
+//                            getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.profile_fragment_container, new SiteDetailsFragment()).commit();
                         }
                     });
                 } else {
                     Toast.makeText(getApplicationContext(), "Couldn't load fragment_categories", Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-
-        MySiteAdapter sitesAdapter = new MySiteAdapter(siteOptions,getApplicationContext());
-
-        sitesListView.setAdapter(sitesAdapter);
-        sitesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // get the Item name
-                Site siteItem = (Site) parent.getItemAtPosition(position);
-                // TODO get site details
-                getSupportFragmentManager().beginTransaction().replace(R.id.profile_fragment_container, new SiteDetailsFragment()).commit();
             }
         });
 
