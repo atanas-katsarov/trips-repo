@@ -29,14 +29,11 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-//            LayoutInflater inflater = ((MainActivity) getContext()).getLayoutInflater();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate (R.layout.row_item_category, parent, false);
         }
         TextView titleView = convertView.findViewById(R.id.category_row_title);
-//        TextView descView = convertView.findViewById(R.id.site_row_desc);
         titleView.setText(getItem(position).getName());
-//        descView.setText(getItem(position).getDescription());
         return convertView;
     }
 }

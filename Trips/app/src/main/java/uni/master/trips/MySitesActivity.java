@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -64,17 +62,6 @@ public class MySitesActivity extends AppCompatActivity {
                     // set adapter to the listView
                     final MySiteAdapter siteAdapter = new MySiteAdapter(siteOptions, getApplicationContext());
                     sitesListView.setAdapter(siteAdapter);
-                    sitesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            // get the Item name
-                            Site siteItem = (Site) parent.getItemAtPosition(position);
-                            // set title of action bar
-                            getSupportActionBar().setTitle(siteItem.getName());
-                            Toast.makeText(getApplicationContext(), "Couldn't load fragment_categories", Toast.LENGTH_LONG).show();
-//                            getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.profile_fragment_container, new SiteDetailsFragment()).commit();
-                        }
-                    });
                 } else {
                     Toast.makeText(getApplicationContext(), "Couldn't load fragment_categories", Toast.LENGTH_LONG).show();
                 }
@@ -100,7 +87,7 @@ public class MySitesActivity extends AppCompatActivity {
                 startActivity(new Intent(MySitesActivity.this, MainActivity.class));
                 break;
             case R.id.add_new_site:
-                startActivity(new Intent(MySitesActivity.this, NewSiteActivity.class));
+                startActivity(new Intent(MySitesActivity.this, CreateEditSiteActivity.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity implements CategoriesFragmen
                 Bundle b = new Bundle();
                 b.putString("email", firebaseAuth.getCurrentUser().getEmail());
                 intent.putExtras(b);
-                finish();
                 startActivity(intent);
                 break;
         }
