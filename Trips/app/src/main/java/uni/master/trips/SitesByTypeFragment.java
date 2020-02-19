@@ -36,7 +36,6 @@ public class SitesByTypeFragment extends Fragment {
     private OnSiteByTypeInteractionListener mListener;
 
     private FirebaseFirestore db;
-    private FirebaseAuth firebaseAuth;
     private List<Site> siteOptions;
     private ListView sitesListView;
 
@@ -87,12 +86,11 @@ public class SitesByTypeFragment extends Fragment {
                             Site siteItem = (Site) parent.getItemAtPosition(position);
                             // set title of action bar
                             ((MainActivity) getActivity()).getSupportActionBar().setTitle(siteItem.getName());
-                            // TODO filter sites by the selected category
-                            getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, new SiteDetailsFragment()).commit();
+                            getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, SiteDetailsFragment.newInstance(siteItem.getId())).commit();
                         }
                     });
                 } else {
-                    Toast.makeText(getActivity().getApplicationContext(), "Couldn't load fragment_categories", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Couldn't load the site for the selected category", Toast.LENGTH_LONG).show();
                 }
             }
         });

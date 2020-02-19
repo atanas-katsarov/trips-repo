@@ -6,27 +6,36 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Objects;
+
+import uni.master.trips.entities.Site;
+
 public class SiteDetailsFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
-
+    private static final String ID_SITE = "id";
+    private Integer idSite;
+    private FirebaseFirestore db;
     private OnDetailsInteractionListener mListener;
 
     public SiteDetailsFragment() {
         // Required empty public constructor
     }
-    public static SiteDetailsFragment newInstance(String param1, String param2) {
+
+    public static SiteDetailsFragment newInstance(Integer id) {
         SiteDetailsFragment fragment = new SiteDetailsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putInt(ID_SITE, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -35,9 +44,23 @@ public class SiteDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            idSite = getArguments().getInt(ID_SITE);
         }
+
+        db = FirebaseFirestore.getInstance();
+        db.collection("Sites").whereEqualTo("id", idSite).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot siteSnapshot : Objects.requireNonNull(task.getResult())) {
+                        Site site = siteSnapshot.toObject(Site.class);
+                        Toast.makeText(getActivity().getApplicationContext(), "Pishki", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), "Couldn't load site details", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
