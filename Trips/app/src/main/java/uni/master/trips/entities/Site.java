@@ -80,4 +80,20 @@ public class Site implements Serializable {
     public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
 }
