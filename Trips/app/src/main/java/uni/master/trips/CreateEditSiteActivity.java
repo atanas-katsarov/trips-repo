@@ -53,7 +53,7 @@ public class CreateEditSiteActivity extends AppCompatActivity {
                     }
                     // set adapter to the listView
                     final CategoryAdapter categoriesAdapter = new CategoryAdapter(categoryOptions, getApplicationContext());
-                    categoriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    categoriesAdapter.setDropDownViewResource(R.layout.row_item_spinner);
 
                     categorySpinner.setAdapter(categoriesAdapter);
                 } else {
