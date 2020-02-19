@@ -70,7 +70,7 @@ public class SitesByTypeFragment extends Fragment {
         siteOptions = new ArrayList<>();
 
         db = FirebaseFirestore.getInstance();
-        db.collection("Sites").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        db.collection("Sites").whereEqualTo("categoryId", idCategory).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
