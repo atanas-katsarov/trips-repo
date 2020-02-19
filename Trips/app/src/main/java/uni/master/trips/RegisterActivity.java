@@ -50,9 +50,6 @@ public class RegisterActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         db = FirebaseFirestore.getInstance();
                         User user = new User(username.getText().toString());
-                        Map<String, Object> userMap = new HashMap<>();
-                        userMap.put("ID", user.getId());
-                        userMap.put("Email", user.getEmail());
                         db.collection("Users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {

@@ -17,7 +17,7 @@
         android:textSize="23sp" />
 
     <ImageButton
-        android:id="@+id/delete_site_btn"
+        android:id="@+id/edit_site_btn"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:gravity="center"
@@ -25,7 +25,7 @@
         android:src="@drawable/ic_edit_site"/>
 
     <ImageButton
-        android:id="@+id/edit_site_btn"
+        android:id="@+id/delete_site_btn"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:gravity="center"

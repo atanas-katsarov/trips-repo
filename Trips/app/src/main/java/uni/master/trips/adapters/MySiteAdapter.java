@@ -16,7 +16,6 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import uni.master.trips.CreateEditSiteActivity;
-import uni.master.trips.MySitesActivity;
 import uni.master.trips.R;
 import uni.master.trips.entities.Site;
 
@@ -42,20 +41,18 @@ public class MySiteAdapter extends ArrayAdapter<Site> implements View.OnClickLis
 
                 break;
             case R.id.edit_site_btn:
-                Intent intent = new Intent(context, CreateEditSiteActivity.class);
+                Intent intent = new Intent(getContext(), CreateEditSiteActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("id", site.getId());
                 bundle.putInt("category", site.getCategoryId());
                 bundle.putString("name", site.getName());
                 bundle.putString("description", site.getDescription());
                 bundle.putString("country", site.getCountryName());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtras(bundle);
-                context.startActivity(intent);
+                getContext().startActivity(intent);
                 break;
         }
-
-
-
     }
 
     @NonNull
