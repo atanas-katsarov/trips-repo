@@ -4,16 +4,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import uni.master.trips.adapters.MySiteAdapter;
+import uni.master.trips.entities.Site;
 
 public class MySitesActivity extends AppCompatActivity {
 
+    private FirebaseFirestore db;
     private FirebaseAuth firebaseAuth;
+    private ListView sitesListView;
+    private List<Site> siteOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +44,51 @@ public class MySitesActivity extends AppCompatActivity {
 
         // get the Authentication object
         firebaseAuth = FirebaseAuth.getInstance();
+
+        sitesListView = findViewById(R.id.my_sites_list);
+        siteOptions = new ArrayList<>();
+
+        db = FirebaseFirestore.getInstance();
+        db.collection("Sites").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot siteSnapshot : Objects.requireNonNull(task.getResult())) {
+                        siteOptions.add(siteSnapshot.toObject(Site.class));
+                    }
+                    // set adapter to the listView
+                    final MySiteAdapter siteAdapter = new MySiteAdapter(siteOptions, getApplicationContext());
+                    sitesListView.setAdapter(siteAdapter);
+                    sitesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            // get the Item name
+                            Site siteItem = (Site) parent.getItemAtPosition(position);
+                            // set title of action bar
+                            getSupportActionBar().setTitle(siteItem.getName());
+                            // TODO filter sites by the selected category
+                            getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.fragment_container, new SiteDetailsFragment()).commit();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Couldn't load fragment_categories", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        MySiteAdapter sitesAdapter = new MySiteAdapter(siteOptions,getApplicationContext());
+
+        sitesListView.setAdapter(sitesAdapter);
+        sitesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // get the Item name
+                Site siteItem = (Site) parent.getItemAtPosition(position);
+                // TODO get site details
+                getSupportFragmentManager().beginTransaction().replace(R.id.profile_fragment_container, new SiteDetailsFragment()).commit();
+            }
+        });
+
     }
 
     @Override

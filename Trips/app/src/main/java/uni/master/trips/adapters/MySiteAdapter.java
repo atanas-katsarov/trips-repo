@@ -42,8 +42,8 @@ public class MySiteAdapter extends ArrayAdapter<Site> implements View.OnClickLis
         }
         TextView siteTitle = convertView.findViewById(R.id.my_site_title);
         siteTitle.setText(getItem(position).getName());
-        Button deleteBtn = convertView.findViewById(R.id.delete_site_btn);
-        deleteBtn.setOnClickListener(this);
+//        Button deleteBtn = convertView.findViewById(R.id.delete_site_btn);
+//        deleteBtn.setOnClickListener(this);
         return convertView;
     }
 }
