@@ -21,9 +21,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import uni.master.trips.adapters.ListSpinnerAdapter;
@@ -32,6 +35,9 @@ import uni.master.trips.entities.Site;
 
 public class CreateEditSiteActivity extends AppCompatActivity {
 
+
+    private String previousSiteId;
+    private Integer categoryId;
     private Spinner categorySpinner;
     private Spinner countrySpinner;
     private EditText nameInput;
@@ -45,31 +51,61 @@ public class CreateEditSiteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_site);
 
-        categorySpinner = findViewById(R.id.category_input);
-        countrySpinner = findViewById(R.id.country_input);
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null) {
-            nameInput = findViewById(R.id.site_name_input);
-            descriptionInput = findViewById(R.id.site_desc_input);
-        }
-
         // get the Authentication object
         firebaseAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+
+        categorySpinner = findViewById(R.id.category_input);
+        countrySpinner = findViewById(R.id.country_input);
+        nameInput = findViewById(R.id.site_name_input);
+        descriptionInput = findViewById(R.id.site_desc_input);
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            String name = bundle.getString("name");
+            String description = bundle.getString("description");
+            if (name != null) {
+                nameInput.setText(name);
+            }
+            if (description != null) {
+                descriptionInput.setText(description);
+            }
+
+            int id = bundle.getInt("id");
+            db.collection("Sites").whereEqualTo("id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot siteSnapshot : Objects.requireNonNull(task.getResult())) {
+                            previousSiteId = siteSnapshot.getId();
+                        }
+                    }
+                }
+            });
+            categoryId = bundle.getInt("category");
+            String countryId = bundle.getString("country");
+        }
+
         // list with options
         categoryOptions = new ArrayList<>();
-        db = FirebaseFirestore.getInstance();
         db.collection("Categories").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
+                    Category previousCategory = null;
                     for (QueryDocumentSnapshot categorySnapshot : Objects.requireNonNull(task.getResult())) {
-                        categoryOptions.add(categorySnapshot.toObject(Category.class));
+                        Category categoryToAdd = categorySnapshot.toObject(Category.class);
+                        categoryOptions.add(categoryToAdd);
+                        if (categoryId != null && categoryToAdd.getId() == categoryId) {
+                            previousCategory = categoryToAdd;
+                        }
                     }
                     // set adapter to the listView
                     final ListSpinnerAdapter categoriesAdapter = new ListSpinnerAdapter(categoryOptions, getApplicationContext());
                     categoriesAdapter.setDropDownViewResource(R.layout.row_item_spinner);
-
                     categorySpinner.setAdapter(categoriesAdapter);
+                    if (previousCategory != null) {
+                        categorySpinner.setSelection(categoriesAdapter.getPosition(previousCategory));
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), "Couldn't load fragment_categories", Toast.LENGTH_LONG).show();
                 }
@@ -81,31 +117,61 @@ public class CreateEditSiteActivity extends AppCompatActivity {
         countryOptions.add("Jamaica");
         countryOptions.add("Japan");
 
-        final ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.row_item_spinner ,countryOptions);
+        final ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.row_item_spinner, countryOptions);
         countrySpinner.setAdapter(countryAdapter);
 
-        Button btn = findViewById(R.id.btn_create_edit);
-        btn.setOnClickListener(new View.OnClickListener() {
+        Button btnSave = findViewById(R.id.btn_create_edit);
+        btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Category categorySelected = (Category) categorySpinner.getSelectedItem();
-                Site site = new Site("Saved from Java", "Desc", "Jamaica", "aaaa@aaa.com", 2);
 
-//                Site site = new Site(nameInput.getText().toString(), descriptionInput.getText().toString(), countrySpinner.getSelectedItem().toString(), firebaseAuth.getCurrentUser().getEmail(), categorySelected.getId());
-                db.collection("Sites").add(site).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-//                Intent categoryPage = new Intent(getApplicationContext(), MainActivity.class);
-                finish();
-                Toast.makeText(getApplicationContext(), "Site created", Toast.LENGTH_LONG).show();
-//                startActivity(categoryPage);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Couldn't create the new site", Toast.LENGTH_LONG).show();
-                    }
-                });
+                final Category categorySelected = (Category) categorySpinner.getSelectedItem();
+                if (previousSiteId == null) {
+                    Site site = new Site(nameInput.getText().toString(), descriptionInput.getText().toString(), countrySpinner.getSelectedItem().toString(), firebaseAuth.getCurrentUser().getEmail(), categorySelected.getId());
+                    db.collection("Sites").add(site).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+//                            Intent mySitesIntent = new Intent(getApplicationContext(), MySitesActivity.class);
+                            finish();
+                            Toast.makeText(getApplicationContext(), "Site created", Toast.LENGTH_LONG).show();
+//                            startActivity(mySitesIntent);
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), "Couldn't create the new site", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } else {
+                    Map<Object, String> mapStr = new HashMap<>();
+                    Map<Object, Integer> mapInt = new HashMap<>();
+                    mapStr.put("name", nameInput.getText().toString());
+                    mapStr.put("description", descriptionInput.getText().toString());
+                    mapStr.put("countryName", countrySpinner.getSelectedItem().toString());
+                    db.collection("Sites")
+                            .document(previousSiteId)
+                            .set(mapStr, SetOptions.merge())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+//                                    Intent mySitesIntent = new Intent(getApplicationContext(), MySitesActivity.class);
+                                    finish();
+                                    Toast.makeText(getApplicationContext(), "Site edited successfully ", Toast.LENGTH_LONG).show();
+//                                    startActivity(mySitesIntent);
+                                }
+
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getApplicationContext(), "Couldn't edit the site", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                    mapInt.put("categoryId", categorySelected.getId());
+                    db.collection("Sites")
+                            .document(previousSiteId)
+                            .set(mapInt, SetOptions.merge());
+                }
             }
         });
     }

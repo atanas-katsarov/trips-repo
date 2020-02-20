@@ -58,7 +58,6 @@ public class MySitesActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot siteSnapshot : Objects.requireNonNull(task.getResult())) {
                         siteOptions.add(siteSnapshot.toObject(Site.class));
                     }
-                    siteOptions.add(new Site("Test site", "Description", "bulgaria", "email", 2));
                     // set adapter to the listView
                     final MySiteAdapter siteAdapter = new MySiteAdapter(siteOptions, getApplicationContext());
                     sitesListView.setAdapter(siteAdapter);
