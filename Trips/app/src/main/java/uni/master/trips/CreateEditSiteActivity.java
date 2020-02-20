@@ -3,7 +3,6 @@ package uni.master.trips;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -26,6 +25,7 @@ import com.google.firebase.firestore.SetOptions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -36,8 +36,9 @@ import uni.master.trips.entities.Site;
 public class CreateEditSiteActivity extends AppCompatActivity {
 
 
-    private String previousSiteId;
-    private Integer categoryId;
+    private String previousSiteDocId;
+    private Integer prevCategoryId;
+    private String prevCountry;
     private Spinner categorySpinner;
     private Spinner countrySpinner;
     private EditText nameInput;
@@ -76,13 +77,13 @@ public class CreateEditSiteActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot siteSnapshot : Objects.requireNonNull(task.getResult())) {
-                            previousSiteId = siteSnapshot.getId();
+                            previousSiteDocId = siteSnapshot.getId();
                         }
                     }
                 }
             });
-            categoryId = bundle.getInt("category");
-            String countryId = bundle.getString("country");
+            prevCategoryId = bundle.getInt("category");
+            prevCountry = bundle.getString("country");
         }
 
         // list with options
@@ -95,7 +96,7 @@ public class CreateEditSiteActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot categorySnapshot : Objects.requireNonNull(task.getResult())) {
                         Category categoryToAdd = categorySnapshot.toObject(Category.class);
                         categoryOptions.add(categoryToAdd);
-                        if (categoryId != null && categoryToAdd.getId() == categoryId) {
+                        if (prevCategoryId != null && categoryToAdd.getId() == prevCategoryId) {
                             previousCategory = categoryToAdd;
                         }
                     }
@@ -111,14 +112,16 @@ public class CreateEditSiteActivity extends AppCompatActivity {
                 }
             }
         });
-        // TODO: Get countries from API
         List<String> countryOptions = new ArrayList<>();
-        countryOptions.add("Bulgaria");
-        countryOptions.add("Jamaica");
-        countryOptions.add("Japan");
-
+        for (String country : Locale.getISOCountries()) {
+            Locale locale = new Locale("en", country);
+            countryOptions.add(locale.getDisplayCountry());
+        }
         final ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.row_item_spinner, countryOptions);
         countrySpinner.setAdapter(countryAdapter);
+        if (prevCountry != null) {
+            countrySpinner.setSelection(countryAdapter.getPosition(prevCountry));
+        }
 
         Button btnSave = findViewById(R.id.btn_create_edit);
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -126,7 +129,7 @@ public class CreateEditSiteActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 final Category categorySelected = (Category) categorySpinner.getSelectedItem();
-                if (previousSiteId == null) {
+                if (previousSiteDocId == null) {
                     Site site = new Site(nameInput.getText().toString(), descriptionInput.getText().toString(), countrySpinner.getSelectedItem().toString(), firebaseAuth.getCurrentUser().getEmail(), categorySelected.getId());
                     db.collection("Sites").add(site).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
@@ -149,7 +152,7 @@ public class CreateEditSiteActivity extends AppCompatActivity {
                     mapStr.put("description", descriptionInput.getText().toString());
                     mapStr.put("countryName", countrySpinner.getSelectedItem().toString());
                     db.collection("Sites")
-                            .document(previousSiteId)
+                            .document(previousSiteDocId)
                             .set(mapStr, SetOptions.merge())
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -169,7 +172,7 @@ public class CreateEditSiteActivity extends AppCompatActivity {
                             });
                     mapInt.put("categoryId", categorySelected.getId());
                     db.collection("Sites")
-                            .document(previousSiteId)
+                            .document(previousSiteDocId)
                             .set(mapInt, SetOptions.merge());
                 }
             }
