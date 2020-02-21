@@ -62,7 +62,7 @@ public class MySitesActivity extends AppCompatActivity {
                     final MySiteAdapter siteAdapter = new MySiteAdapter(siteOptions, getApplicationContext());
                     sitesListView.setAdapter(siteAdapter);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Couldn't load fragment_categories", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Couldn't load MySites", Toast.LENGTH_LONG).show();
                 }
             }
         });
