@@ -130,6 +130,11 @@ public class CreateEditSiteActivity extends AppCompatActivity {
         }
 
         Button btnSave = findViewById(R.id.btn_create_edit);
+        if (bundle == null) {
+            btnSave.setText("Create");
+        } else {
+            btnSave.setText("Edit");
+        }
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
