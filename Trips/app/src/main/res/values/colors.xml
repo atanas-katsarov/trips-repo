@@ -6,4 +6,5 @@
     <color name="colorBackground">#CEDEDB</color>
     <color name="colorTitle">#0d0f0f</color>
     <color name="colorDescription">#252626</color>
+    <color name="colorRowItemBackground">#f7f7f7</color>
 </resources>

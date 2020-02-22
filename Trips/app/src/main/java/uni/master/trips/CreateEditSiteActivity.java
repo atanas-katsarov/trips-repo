@@ -3,6 +3,7 @@ package uni.master.trips;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -46,6 +47,7 @@ public class CreateEditSiteActivity extends AppCompatActivity {
     private List<Category> categoryOptions;
     private FirebaseFirestore db;
     private FirebaseAuth firebaseAuth;
+    private int positionInList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,8 @@ public class CreateEditSiteActivity extends AppCompatActivity {
             }
 
             int id = bundle.getInt("id");
+            positionInList = bundle.getInt("position");
+
             db.collection("Sites").whereEqualTo("id", id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -79,6 +83,8 @@ public class CreateEditSiteActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot siteSnapshot : Objects.requireNonNull(task.getResult())) {
                             previousSiteDocId = siteSnapshot.getId();
                         }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Can't load site from DB", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -134,10 +140,15 @@ public class CreateEditSiteActivity extends AppCompatActivity {
                     db.collection("Sites").add(site).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
-//                            Intent mySitesIntent = new Intent(getApplicationContext(), MySitesActivity.class);
-                            finish();
+                            Intent backIntent = new Intent();
+                            backIntent.putExtra("position", positionInList);
+                            backIntent.putExtra("name", nameInput.getText().toString());
+                            backIntent.putExtra("description", descriptionInput.getText().toString());
+                            backIntent.putExtra("countryName", countrySpinner.getSelectedItem().toString());
+                            backIntent.putExtra("categoryId", categorySelected.getId());
+                            setResult(RESULT_OK, backIntent);
                             Toast.makeText(getApplicationContext(), "Site created", Toast.LENGTH_LONG).show();
-//                            startActivity(mySitesIntent);
+                            finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -151,16 +162,25 @@ public class CreateEditSiteActivity extends AppCompatActivity {
                     mapStr.put("name", nameInput.getText().toString());
                     mapStr.put("description", descriptionInput.getText().toString());
                     mapStr.put("countryName", countrySpinner.getSelectedItem().toString());
+                    mapInt.put("categoryId", categorySelected.getId());
+                    db.collection("Sites")
+                            .document(previousSiteDocId)
+                            .set(mapInt, SetOptions.merge());
                     db.collection("Sites")
                             .document(previousSiteDocId)
                             .set(mapStr, SetOptions.merge())
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-//                                    Intent mySitesIntent = new Intent(getApplicationContext(), MySitesActivity.class);
-                                    finish();
+                                    Intent backIntent = new Intent();
+                                    backIntent.putExtra("position", positionInList);
+                                    backIntent.putExtra("name", nameInput.getText().toString());
+                                    backIntent.putExtra("description", descriptionInput.getText().toString());
+                                    backIntent.putExtra("countryName", countrySpinner.getSelectedItem().toString());
+                                    backIntent.putExtra("categoryId", categorySelected.getId());
+                                    setResult(RESULT_OK, backIntent);
                                     Toast.makeText(getApplicationContext(), "Site edited successfully ", Toast.LENGTH_LONG).show();
-//                                    startActivity(mySitesIntent);
+                                    finish();
                                 }
 
                             })
@@ -170,10 +190,6 @@ public class CreateEditSiteActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Couldn't edit the site", Toast.LENGTH_LONG).show();
                                 }
                             });
-                    mapInt.put("categoryId", categorySelected.getId());
-                    db.collection("Sites")
-                            .document(previousSiteDocId)
-                            .set(mapInt, SetOptions.merge());
                 }
             }
         });
