@@ -30,17 +30,21 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onBtnLoginClick(View v) {
-        firebaseAuth.signInWithEmailAndPassword(username.getText().toString(), password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    finish();
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                } else {
-                    Toast.makeText(LoginActivity.this, "Incorrect email or passowrd", Toast.LENGTH_LONG).show();
+        if(username.getText().length() == 0 || password.getText().length() == 0){
+            Toast.makeText(LoginActivity.this, "Email and password cannot be empty", Toast.LENGTH_LONG).show();
+        } else {
+            firebaseAuth.signInWithEmailAndPassword(username.getText().toString(), password.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        finish();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Incorrect email or passowrd", Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     public void onBtnRegisterClick(View v) {
