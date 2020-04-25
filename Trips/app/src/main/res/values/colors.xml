@@ -7,4 +7,10 @@
     <color name="colorTitle">#0d0f0f</color>
     <color name="colorDescription">#252626</color>
     <color name="colorRowItemBackground">#f7f7f7</color>
+    <color name="colorForegroundDark">#61000000</color>
+    <color name="colorSemiWhite">#99FFFFFF</color>
+    <color name="midGrey">#FF444444</color>
+    <color name="darkGrey">#FF222222</color>
+    <color name="white">#FFFFFFFF</color>
+
 </resources>

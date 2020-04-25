@@ -8,8 +8,11 @@
     android:paddingRight="17dp"
     android:paddingTop="9dp"
     android:paddingBottom="9dp"
+    android:background="@android:drawable/gallery_thumb"
     android:text="Category"
+    android:padding="20dp"
     android:textColor="@color/colorTitle"
-    android:textSize="21sp">
+    android:textAlignment="center"
+    android:textSize="28sp">
 
 </TextView>

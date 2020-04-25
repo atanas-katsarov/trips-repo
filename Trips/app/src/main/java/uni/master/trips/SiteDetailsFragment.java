@@ -13,9 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,9 +22,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import uni.master.trips.entities.Site;
 
 public class SiteDetailsFragment extends Fragment {
@@ -40,6 +40,7 @@ public class SiteDetailsFragment extends Fragment {
     private TextView desc;
     private TextView country;
     private ImageView flag;
+    private ImageView siteImg;
 
     public SiteDetailsFragment() {
         // Required empty public constructor
@@ -70,6 +71,7 @@ public class SiteDetailsFragment extends Fragment {
         desc = view.findViewById(R.id.desc_details);
         country = view.findViewById(R.id.country_details);
         flag = view.findViewById(R.id.flag_details);
+        siteImg = view.findViewById(R.id.site_image);
 
         db = FirebaseFirestore.getInstance();
         db.collection("Sites").whereEqualTo("id", idSite).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -109,6 +111,13 @@ public class SiteDetailsFragment extends Fragment {
                         title.setText(site.getName());
                         desc.setText(site.getDescription());
                         country.setText(site.getCountryName());
+
+                        Picasso.get()
+                                .load("https://www.komar.de/en/media/catalog/product/cache/5/image/9df78eab33525d08d6e5fb8d27136e95/S/H/SHX9-008_1568286487.jpg")
+//                              .resize(250,250)
+                                .into(siteImg);
+
+
                     }
                 } else {
                     Toast.makeText(getActivity().getApplicationContext(), "Couldn't load site details", Toast.LENGTH_LONG).show();
